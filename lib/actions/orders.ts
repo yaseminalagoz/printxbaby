@@ -148,6 +148,23 @@ export async function updateOrderStatus(formData: FormData) {
   redirect(`/orders/${orderId}`);
 }
 
+export async function bulkMarkDelivered(orderIds: string[]) {
+  const supabase = createClient();
+  const today = new Date().toISOString().slice(0, 10);
+
+  const { error } = await supabase
+    .from("orders")
+    .update({ production_status: "teslim_edildi", delivered_at: today })
+    .in("id", orderIds);
+
+  if (error) throw new Error(error.message);
+
+  revalidatePath("/orders");
+  revalidatePath("/production");
+  revalidatePath("/daily-list");
+  revalidatePath("/");
+}
+
 export async function addPayment(formData: FormData) {
   const supabase = createClient();
   const orderId = String(formData.get("order_id") ?? "");

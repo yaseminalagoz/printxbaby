@@ -10,7 +10,7 @@ import {
   type OrderWithCustomer,
   type PaymentStatus,
 } from "@/lib/types";
-import { OrderRow } from "@/components/order-row";
+import { BulkActions } from "@/components/bulk-actions";
 
 export const dynamic = "force-dynamic";
 
@@ -128,11 +128,7 @@ export default async function OrdersPage({
           Bu filtrelere uyan sipariş bulunamadı.
         </div>
       ) : (
-        <div className="space-y-2">
-          {filtered.map((order) => (
-            <OrderRow key={order.id} order={order} />
-          ))}
-        </div>
+        <BulkActions orders={filtered} />
       )}
     </div>
   );
