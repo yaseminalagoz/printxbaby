@@ -44,7 +44,7 @@ export interface Order {
   decoration_color: string | null;
   extra_figures: string | null;
   kapi_tulu: boolean;
-  magnet: boolean;
+  magnet_adet: number;
   design_images: string[];
 
   order_date: string;

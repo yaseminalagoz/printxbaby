@@ -45,13 +45,13 @@ export function OrderForm({
   const [size, setSize] = useState<OrderSize>(order?.size ?? "30");
   const [led, setLed] = useState<LedOption>(order?.led ?? "ledli");
   const [kapiTulu, setKapiTulu] = useState(order?.kapi_tulu ?? false);
-  const [magnet, setMagnet] = useState(order?.magnet ?? false);
+  const [magnetAdet, setMagnetAdet] = useState(order?.magnet_adet ?? 0);
   const [orderDate, setOrderDate] = useState(
     order?.order_date ? order.order_date.slice(0, 10) : formatDateInput()
   );
 
   const basePrice = useMemo(() => getPrice(pricing, size, led), [pricing, size, led]);
-  const price = useMemo(() => basePrice + (kapiTulu ? 500 : 0) + (magnet ? 80 : 0), [basePrice, kapiTulu, magnet]);
+  const price = useMemo(() => basePrice + (kapiTulu ? 500 : 0) + (magnetAdet * 80), [basePrice, kapiTulu, magnetAdet]);
   const deliveryPreview = useMemo(
     () => calculateDeliveryDate(orderDate || formatDateInput()),
     [orderDate]
@@ -152,10 +152,18 @@ export function OrderForm({
               <input type="checkbox" name="kapi_tulu" checked={kapiTulu} onChange={(e) => setKapiTulu(e.target.checked)} className="h-4 w-4 accent-brand-500" />
               <span className="text-sm font-medium text-ink">Kapı Tülü <span className="text-muted">+500₺</span></span>
             </label>
-            <label className={`flex flex-1 cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition-colors ${magnet ? "border-brand-500 bg-brand-50" : "border-border hover:border-brand-300"}`}>
-              <input type="checkbox" name="magnet" checked={magnet} onChange={(e) => setMagnet(e.target.checked)} className="h-4 w-4 accent-brand-500" />
-              <span className="text-sm font-medium text-ink">Magnet <span className="text-muted">+80₺</span></span>
-            </label>
+            <div className={`flex flex-1 items-center gap-3 rounded-xl border px-4 py-3 transition-colors ${magnetAdet > 0 ? "border-brand-500 bg-brand-50" : "border-border"}`}>
+              <span className="flex-1 text-sm font-medium text-ink">Magnet <span className="text-muted">+80₺/adet</span></span>
+              <input
+                type="number"
+                name="magnet_adet"
+                min="0"
+                max="20"
+                value={magnetAdet}
+                onChange={(e) => setMagnetAdet(Number(e.target.value) || 0)}
+                className="w-16 rounded-lg border border-border px-2 py-1 text-center text-sm"
+              />
+            </div>
           </div>
         </div>
 
