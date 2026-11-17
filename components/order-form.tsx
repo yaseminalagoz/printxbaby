@@ -18,7 +18,7 @@ import {
 import { CustomerPicker } from "@/components/customer-picker";
 import { DesignImageUploader } from "@/components/design-image-uploader";
 
-const SIZES: OrderSize[] = ["30", "35", "40"];
+const SIZES: OrderSize[] = ["25", "30", "35", "40"];
 const LEDS: LedOption[] = ["ledli", "ledsiz"];
 const DELIVERY_TYPES: DeliveryType[] = ["normal", "acil", "hizli_kargo"];
 const PAYMENT_METHODS: ("iban" | "shopier" | "nakit")[] = ["iban", "shopier", "nakit"];
@@ -44,11 +44,14 @@ export function OrderForm({
 }) {
   const [size, setSize] = useState<OrderSize>(order?.size ?? "30");
   const [led, setLed] = useState<LedOption>(order?.led ?? "ledli");
+  const [kapiTulu, setKapiTulu] = useState(order?.kapi_tulu ?? false);
+  const [magnet, setMagnet] = useState(order?.magnet ?? false);
   const [orderDate, setOrderDate] = useState(
     order?.order_date ? order.order_date.slice(0, 10) : formatDateInput()
   );
 
-  const price = useMemo(() => getPrice(pricing, size, led), [pricing, size, led]);
+  const basePrice = useMemo(() => getPrice(pricing, size, led), [pricing, size, led]);
+  const price = useMemo(() => basePrice + (kapiTulu ? 500 : 0) + (magnet ? 80 : 0), [basePrice, kapiTulu, magnet]);
   const deliveryPreview = useMemo(
     () => calculateDeliveryDate(orderDate || formatDateInput()),
     [orderDate]
@@ -139,6 +142,20 @@ export function OrderForm({
                 </label>
               ))}
             </div>
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <label className="label">Ek Opsiyonlar</label>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <label className={`flex flex-1 cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition-colors ${kapiTulu ? "border-brand-500 bg-brand-50" : "border-border hover:border-brand-300"}`}>
+              <input type="checkbox" name="kapi_tulu" checked={kapiTulu} onChange={(e) => setKapiTulu(e.target.checked)} className="h-4 w-4 accent-brand-500" />
+              <span className="text-sm font-medium text-ink">Kapı Tülü <span className="text-muted">+500₺</span></span>
+            </label>
+            <label className={`flex flex-1 cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition-colors ${magnet ? "border-brand-500 bg-brand-50" : "border-border hover:border-brand-300"}`}>
+              <input type="checkbox" name="magnet" checked={magnet} onChange={(e) => setMagnet(e.target.checked)} className="h-4 w-4 accent-brand-500" />
+              <span className="text-sm font-medium text-ink">Magnet <span className="text-muted">+80₺</span></span>
+            </label>
           </div>
         </div>
 

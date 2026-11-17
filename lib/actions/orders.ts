@@ -34,6 +34,8 @@ function readOrderFields(formData: FormData) {
     name_color: String(formData.get("name_color") ?? "").trim() || null,
     decoration_color: String(formData.get("decoration_color") ?? "").trim() || null,
     extra_figures: String(formData.get("extra_figures") ?? "").trim() || null,
+    kapi_tulu: formData.get("kapi_tulu") === "on",
+    magnet: formData.get("magnet") === "on",
     delivery_type: String(formData.get("delivery_type") ?? "normal") as DeliveryType,
     notes: String(formData.get("notes") ?? "").trim() || null,
     design_images: parseImages(formData),
@@ -63,7 +65,8 @@ export async function createOrder(formData: FormData) {
     .eq("led", fields.led)
     .single();
 
-  const total_price = priceRow?.price ?? 0;
+  const base_price = priceRow?.price ?? 0;
+  const total_price = base_price + (fields.kapi_tulu ? 500 : 0) + (fields.magnet ? 80 : 0);
 
   const insertPayload: Record<string, unknown> = {
     ...fields,
@@ -103,7 +106,8 @@ export async function updateOrder(orderId: string, formData: FormData) {
     .eq("led", fields.led)
     .single();
 
-  const total_price = priceRow?.price ?? 0;
+  const base_price = priceRow?.price ?? 0;
+  const total_price = base_price + (fields.kapi_tulu ? 500 : 0) + (fields.magnet ? 80 : 0);
 
   const { error } = await supabase
     .from("orders")

@@ -43,6 +43,8 @@ export interface Order {
   name_color: string | null;
   decoration_color: string | null;
   extra_figures: string | null;
+  kapi_tulu: boolean;
+  magnet: boolean;
   design_images: string[];
 
   order_date: string;
