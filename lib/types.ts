@@ -1,6 +1,6 @@
 // Veritabanı enum tipleri (supabase/schema.sql ile birebir eşleşir)
 
-export type OrderSize = "30" | "35" | "40";
+export type OrderSize = "25" | "30" | "35" | "40";
 export type LedOption = "ledli" | "ledsiz";
 
 export type ProductionStatus =
@@ -119,6 +119,7 @@ export const PAYMENT_STATUS_LABELS: Record<PaymentStatus, string> = {
 };
 
 export const ORDER_SIZE_LABELS: Record<OrderSize, string> = {
+  "25": "25 cm",
   "30": "30 cm",
   "35": "35 cm",
   "40": "40 cm",

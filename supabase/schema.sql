@@ -12,7 +12,7 @@ create extension if not exists "pgcrypto";
 -- ENUM TİPLERİ
 -- ----------------------------------------------------------------------------
 
-create type order_size as enum ('30', '35', '40');                 -- cm
+create type order_size as enum ('25', '30', '35', '40');           -- cm
 create type led_option as enum ('ledli', 'ledsiz');
 
 create type production_status as enum (
@@ -64,12 +64,14 @@ create table pricing (
 );
 
 insert into pricing (size, led, price) values
-  ('30', 'ledli',  1000),
-  ('30', 'ledsiz',  800),
-  ('35', 'ledli',  1300),
-  ('35', 'ledsiz', 1100),
-  ('40', 'ledli',  1600),
-  ('40', 'ledsiz', 1400);
+  ('25', 'ledli',  1100),
+  ('25', 'ledsiz',  800),
+  ('30', 'ledli',  1400),
+  ('30', 'ledsiz', 1100),
+  ('35', 'ledli',  1700),
+  ('35', 'ledsiz', 1400),
+  ('40', 'ledli',  2000),
+  ('40', 'ledsiz', 1700);
 
 -- ----------------------------------------------------------------------------
 -- SİPARİŞLER
