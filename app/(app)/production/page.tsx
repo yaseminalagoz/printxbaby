@@ -1,10 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
-import {
-  PRODUCTION_STATUS_LABELS,
-  PRODUCTION_STATUS_ORDER,
-  type OrderWithCustomer,
-} from "@/lib/types";
-import { ProductionCard } from "@/components/production-card";
+import { type OrderWithCustomer } from "@/lib/types";
+import { ProductionBoard } from "@/components/production-board";
 
 export const dynamic = "force-dynamic";
 
@@ -30,28 +26,7 @@ export default async function ProductionPage() {
         </p>
       </div>
 
-      <div className="flex gap-4 overflow-x-auto pb-2">
-        {PRODUCTION_STATUS_ORDER.map((status) => {
-          const columnOrders = all.filter((o) => o.production_status === status);
-          return (
-            <div key={status} className="w-72 shrink-0">
-              <div className="mb-3 flex items-center justify-between px-1">
-                <h2 className="text-sm font-semibold text-ink">{PRODUCTION_STATUS_LABELS[status]}</h2>
-                <span className="rounded-full bg-black/5 px-2 py-0.5 text-xs font-medium text-ink/70">
-                  {columnOrders.length}
-                </span>
-              </div>
-              <div className="space-y-2.5">
-                {columnOrders.length === 0 ? (
-                  <p className="px-1 text-xs text-muted">Sipariş yok</p>
-                ) : (
-                  columnOrders.map((order) => <ProductionCard key={order.id} order={order} />)
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      <ProductionBoard orders={all} />
     </div>
   );
 }
